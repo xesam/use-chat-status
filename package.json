@@ -1,0 +1,48 @@
+{
+  "name": "use-chat-status",
+  "version": "0.0.1",
+  "description": "A React hook for managing hierarchical chat status",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:core": "node test/core.runner.js",
+    "test:react": "jest react.",
+    "dev": "tsc --watch",
+    "lint": "eslint src test",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "react",
+    "hook",
+    "chat",
+    "status",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.2.1",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ]
+}
