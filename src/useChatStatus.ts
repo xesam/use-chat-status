@@ -36,12 +36,14 @@ export function useChatStatus(statusTree: StatusTree): UseChatStatusReturn {
       return false;
     }
 
-    if (parsedStatus.leafNodes.has(currentStatus)) {
-      console.warn(`当前状态 "${currentStatus}" 是一个具体状态，不能使用 inGroup 方法判断`);
+    // 检查当前状态是否在指定组内
+    const statusPath = parsedStatus.statusToPath.get(currentStatus);
+    if (!statusPath) {
       return false;
     }
 
-    return currentStatus === group;
+    // 检查路径中是否包含指定的组
+    return statusPath.includes(group);
   }, [currentStatus, parsedStatus]);
 
   const to = useCallback((status: string): boolean => {
