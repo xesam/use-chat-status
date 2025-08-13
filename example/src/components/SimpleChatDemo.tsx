@@ -10,7 +10,7 @@ const simpleStatusTree = [
 ];
 
 export const SimpleChatDemo: React.FC = () => {
-  const { currentStatus, is, to } = useChatStatus(simpleStatusTree);
+  const { currentStatus, is, to } = useChatStatus(simpleStatusTree, 'offline');
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>

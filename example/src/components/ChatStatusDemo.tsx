@@ -22,7 +22,7 @@ const statusTree = [
 ];
 
 export const ChatStatusDemo: React.FC = () => {
-  const { currentStatus, is, inGroup, to } = useChatStatus(statusTree);
+  const { currentStatus, is, inGroup, to } = useChatStatus(statusTree, 'idle');
 
   const getStatusColor = (status: string | null) => {
     if (!status) return '#6b7280';
