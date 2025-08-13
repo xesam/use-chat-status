@@ -1,9 +1,23 @@
 import { useState, useCallback, useMemo } from 'react';
-import { StatusTree, UseChatStatusReturn } from './types';
+import { StatusTree, UseChatStatusReturn, ExtractLeafStates } from './types';
 import { parseStatusTree, validateStatus } from './utils/statusParser';
 
-export function useChatStatus(statusTree: StatusTree): UseChatStatusReturn {
-  const [currentStatus, setCurrentStatus] = useState<string | null>(null);
+export function useChatStatus<T extends StatusTree>(
+  statusTree: T,
+  initialStatus?: ExtractLeafStates<T>
+): UseChatStatusReturn<T> {
+  
+  const [currentStatus, setCurrentStatus] = useState<string | null>(() => {
+    if (initialStatus) {
+      const parsedStatus = parseStatusTree(statusTree);
+      if (!validateStatus(parsedStatus, initialStatus as string, 'leaf')) {
+        console.warn(`初始状态 "${initialStatus}" 无效，将使用 null 作为初始状态`);
+        return null;
+      }
+      return initialStatus as string;
+    }
+    return null;
+  });
   
   // 使用 useMemo 缓存解析结果，提高性能
   const parsedStatus = useMemo(() => parseStatusTree(statusTree), [statusTree]);
