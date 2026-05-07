@@ -286,13 +286,13 @@ inGroup('idle');   // ❌ 编译错误（idle 是叶子状态）
 npm test
 
 # 运行特定测试文件
-npm test -- test/useChatStatus.test.ts
+npm test -- react.hook.test.ts
 
 # 运行边缘情况测试
-npm test -- test/edge-cases.test.ts
+npm test -- react.edge-cases.test.ts
 
 # 运行集成测试
-npm test -- test/integration.test.ts
+npm test -- react.integration.test.ts
 ```
 
 ## TypeScript 支持
@@ -309,7 +309,7 @@ const statusTree: StatusTree = [
   }
 ];
 
-const { currentStatus, is, inGroup, to }: UseChatStatusReturn = useChatStatus(statusTree);
+const { currentStatus, is, inGroup, to }: UseChatStatusReturn<typeof statusTree> = useChatStatus(statusTree);
 ```
 
 ## 贡献

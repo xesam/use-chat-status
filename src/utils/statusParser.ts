@@ -6,7 +6,6 @@ export interface ParsedStatus {
   parentMap: Map<string, string>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function parseStatusTree(tree: readonly unknown[]): ParsedStatus {
   const leafNodes = new Set<string>();
   const groupNodes = new Set<string>();
@@ -14,7 +13,6 @@ export function parseStatusTree(tree: readonly unknown[]): ParsedStatus {
   const groupToPath = new Map<string, string[]>();
   const parentMap = new Map<string, string>();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function traverse(nodes: readonly unknown[], currentPath: string[] = []): void {
     for (const node of nodes) {
       if (typeof node === 'string') {
