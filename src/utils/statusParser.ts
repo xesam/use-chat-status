@@ -1,4 +1,4 @@
-import { StatusTree } from '../types';
+import { StatusTree, StatusNode } from '../types';
 
 export interface ParsedStatus {
   leafNodes: Set<string>;
@@ -8,14 +8,16 @@ export interface ParsedStatus {
   parentMap: Map<string, string>;
 }
 
-export function parseStatusTree(tree: StatusTree): ParsedStatus {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function parseStatusTree(tree: StatusTree | readonly StatusNode[] | readonly any[]): ParsedStatus {
   const leafNodes = new Set<string>();
   const groupNodes = new Set<string>();
   const statusToPath = new Map<string, string[]>();
   const groupToPath = new Map<string, string[]>();
   const parentMap = new Map<string, string>();
 
-  function traverse(nodes: StatusTree, currentPath: string[] = []): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function traverse(nodes: readonly any[], currentPath: string[] = []): void {
     for (const node of nodes) {
       if (typeof node === 'string') {
         // 叶子节点
@@ -41,7 +43,8 @@ export function parseStatusTree(tree: StatusTree): ParsedStatus {
           }
           
           // 递归处理子节点
-          traverse(children, [...currentPath, groupName]);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          traverse(children as any[], [...currentPath, groupName]);
         }
       }
     }
