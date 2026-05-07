@@ -64,14 +64,15 @@ function ChatComponent() {
 
 #### 参数
 - `statusTree: StatusTree` - 状态结构定义
+- `initialStatus?: string` - 可选的初始状态，必须是叶子状态（配合 `as const` 时具有字面量类型约束）
 
 #### 返回值
 ```typescript
 interface UseChatStatusReturn {
   currentStatus: string | null;  // 当前状态
-  is: (status: string) => boolean;  // 判断是否为指定状态
-  inGroup: (group: string) => boolean;  // 判断是否在某个状态组
-  to: (status: string) => boolean;  // 转换到指定状态
+  is: (status: LeafState) => boolean;  // 配合 as const，参数为叶子状态字面量类型
+  inGroup: (group: GroupState) => boolean;  // 配合 as const，参数为组名字面量类型
+  to: (status: LeafState) => boolean;  // 配合 as const，参数为叶子状态字面量类型
 }
 ```
 
