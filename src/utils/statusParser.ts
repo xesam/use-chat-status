@@ -1,5 +1,3 @@
-import { StatusTree, StatusNode } from '../types';
-
 export interface ParsedStatus {
   leafNodes: Set<string>;
   groupNodes: Set<string>;
@@ -9,7 +7,7 @@ export interface ParsedStatus {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function parseStatusTree(tree: StatusTree | readonly StatusNode[] | readonly any[]): ParsedStatus {
+export function parseStatusTree(tree: readonly unknown[]): ParsedStatus {
   const leafNodes = new Set<string>();
   const groupNodes = new Set<string>();
   const statusToPath = new Map<string, string[]>();
@@ -17,7 +15,7 @@ export function parseStatusTree(tree: StatusTree | readonly StatusNode[] | reado
   const parentMap = new Map<string, string>();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function traverse(nodes: readonly any[], currentPath: string[] = []): void {
+  function traverse(nodes: readonly unknown[], currentPath: string[] = []): void {
     for (const node of nodes) {
       if (typeof node === 'string') {
         // 叶子节点
@@ -32,19 +30,18 @@ export function parseStatusTree(tree: StatusTree | readonly StatusNode[] | reado
         }
       } else {
         // 组节点
-        for (const [groupName, children] of Object.entries(node)) {
+        for (const [groupName, children] of Object.entries(node as Record<string, unknown>)) {
           groupNodes.add(groupName);
           groupToPath.set(groupName, [...currentPath, groupName]);
-          
+
           // 记录父关系
           if (currentPath.length > 0) {
             const parent = currentPath[currentPath.length - 1];
             parentMap.set(groupName, parent);
           }
-          
+
           // 递归处理子节点
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          traverse(children as any[], [...currentPath, groupName]);
+          traverse(children as readonly unknown[], [...currentPath, groupName]);
         }
       }
     }
