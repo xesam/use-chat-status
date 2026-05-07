@@ -1,15 +1,13 @@
 # useChatStatus - React 聊天状态管理 Hook
 
-一个专为 React 应用设计的聊天状态管理 Hook，支持层次化的状态结构。
+一个专为 React 应用设计的聊天状态 Hook，用树形结构定义状态分组，提供语义化的状态查询（`is`、`inGroup`）和切换（`to`）。
 
 ## 特性
 
-- 🌳 **层次化状态结构**：支持树形结构的状态定义
-- ⚡ **高性能**：使用内存优化，空间换时间策略
-- 🎯 **类型安全**：完整的 TypeScript 支持
+- 🌳 **层次化状态结构**：支持树形结构的状态定义，`inGroup()` 可查询任意层级的组归属
+- 🎯 **类型安全**：配合 `as const` 断言，`is()`、`inGroup()`、`to()` 参数具有字面量类型提示，非法状态名编译报错
 - 🧪 **测试驱动**：100% 测试覆盖率
-- 🔄 **状态验证**：智能的状态和组验证
-- 📊 **调试友好**：详细的警告信息
+- 📊 **调试友好**：运行时非法状态转换会输出警告信息
 
 ## 安装
 
@@ -227,6 +225,49 @@ const isActive = is('nonexistent'); // false，并输出警告
 
 // 使用错误的方法判断状态组
 // 注意：is() 只能用于叶子状态，inGroup() 只能用于状态组
+```
+
+## 注意事项
+
+### statusTree 应保持稳定引用
+
+`statusTree` 是 `useMemo` 的依赖项。如果每次渲染都传入字面量数组，缓存会失效，状态树会在每次渲染时重新解析。
+
+```typescript
+// ❌ 每次渲染都创建新数组，缓存失效
+function Component() {
+  const { is } = useChatStatus(['idle', 'active']); // 新引用
+}
+
+// ✅ 在组件外定义
+const statusTree = ['idle', 'active'] as const;
+function Component() {
+  const { is } = useChatStatus(statusTree);
+}
+
+// ✅ 或使用 useMemo
+function Component() {
+  const statusTree = useMemo(() => ['idle', 'active'] as const, []);
+  const { is } = useChatStatus(statusTree);
+}
+```
+
+### 类型安全使用方式
+
+使用 `as const` 断言以获得完整的字面量类型推断：
+
+```typescript
+const statusTree = [
+  'idle',
+  'connecting',
+  { chat: ['active', { typing: ['user_typing', 'bot_typing'] }] }
+] as const;
+
+const { is, inGroup, to } = useChatStatus(statusTree);
+is('idle');        // ✅
+is('wrong');       // ❌ 编译错误
+inGroup('chat');   // ✅
+inGroup('idle');   // ❌ 编译错误（idle 是叶子状态）
 ```
 
 ## 性能优化
