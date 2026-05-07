@@ -21,5 +21,5 @@ export interface UseChatStatusReturn<
   currentStatus: string | null;
   is: (status: LeafStates) => boolean;
   inGroup: (group: GroupStates) => boolean;
-  to: (status: LeafStates) => void;
+  to: (status: LeafStates) => boolean;
 }
